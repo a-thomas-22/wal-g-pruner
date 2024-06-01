@@ -12,14 +12,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Extract version
-        id: get_version
-        run: |
-          VERSION=$(sed -n 's/^version = "\(.*\)"/\1/p' pyproject.toml)
-          VERSION="v$VERSION"
-          echo "VERSION=$VERSION" >> $GITHUB_ENV
-          echo "::set-output name=VERSION::$VERSION"
-
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
 
@@ -40,4 +32,4 @@ jobs:
           push: true
           tags: |
             athomas22/wal-g-pruner:latest
-            athomas22/wal-g-pruner:${{ steps.get_version.outputs.VERSION }}
+            athomas22/wal-g-pruner:${{ github.ref }}
