@@ -31,7 +31,7 @@ def set_env_vars(env_vars):
 @click.command()
 @click.option(
     "--interval",
-    default=3600,
+    default=86400,
     help="Interval in seconds between prunes",
     envvar="PRUNE_INTERVAL",
 )
@@ -39,6 +39,7 @@ def set_env_vars(env_vars):
     "--retain",
     required=True,
     help="Number of full backups to retain",
+    default=2,
     envvar="RETAIN_COUNT",
 )
 @click.option(
