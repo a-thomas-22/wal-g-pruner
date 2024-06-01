@@ -132,7 +132,7 @@ def prune_walg_backups(
     pg_user,
     pg_database,
     pg_password,
-    pg_ssl_mode,
+    pg_sslmode,  # Change here to match the command-line option
 ):
     # Set up logging
     log_level = log_level.upper()
@@ -154,7 +154,12 @@ def prune_walg_backups(
 
     while not terminate:
         if is_primary_database(
-            pg_host, pg_port, pg_user, pg_password, pg_database, pg_ssl_mode
+            pg_host,
+            pg_port,
+            pg_user,
+            pg_password,
+            pg_database,
+            pg_sslmode,  # Change here to match the function parameter
         ):
             try:
                 # Construct the wal-g delete command
