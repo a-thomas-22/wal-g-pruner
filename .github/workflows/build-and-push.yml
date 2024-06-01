@@ -32,4 +32,4 @@ jobs:
           push: true
           tags: |
             athomas22/wal-g-pruner:latest
-            athomas22/wal-g-pruner:${{ github.ref }}
+            athomas22/wal-g-pruner:${{ github.ref_name }}
