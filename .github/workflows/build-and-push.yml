@@ -9,6 +9,11 @@ jobs:
   docker:
     runs-on: ubuntu-latest
     steps:
+      - name: Extract version
+        id: get_version
+        run: |
+          VERSION=$(sed -n 's/^version = "\(.*\)"/\1/p' pyproject.toml)
+          echo ::set-output name=VERSION::$VERSION
       -
         name: Set up QEMU
         uses: docker/setup-qemu-action@v3
@@ -26,4 +31,8 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           push: true
-          tags: athomas22/wal-g-pruner:latest
+          tags: |
+            athomas22/wal-g-pruner:latest
+            athomas22/wal-g-pruner:${{ steps.get_version.outputs.VERSION }}
+          
+
