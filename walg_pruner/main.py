@@ -143,6 +143,36 @@ def prune_walg_backups(
 
     signal.signal(signal.SIGTERM, signal_handler)
 
+    # wait for the database to be ready
+    logging.info("Waiting for the database to be ready...")
+    attempt = 0
+    max_info_attempts = 5
+    max_warn_attempts = 10
+
+    while True:
+        try:
+            with psycopg2.connect(
+                host=pg_host,
+                port=pg_port,
+                user=pg_user,
+                password=pg_password,
+                dbname=pg_database,
+                sslmode=pg_sslmode,
+            ) as db_connection:
+                db_connection.autocommit = True
+                with db_connection.cursor(cursor_factory=DictCursor) as pg_cursor:
+                    pg_cursor.execute("SELECT 1")
+                    break
+        except psycopg2.OperationalError as e:
+            attempt += 1
+            if attempt <= max_info_attempts:
+                logging.info("Database not ready: %s", str(e))
+            elif attempt <= max_warn_attempts:
+                logging.warning("Database not ready: %s", str(e))
+            else:
+                logging.error("Database not ready: %s", str(e))
+            time.sleep(30)
+
     # Set environment variables from envdir if provided
     logging.info(f"Reading environment variables from {envdir}")
     env_vars = read_envdir(envdir)
