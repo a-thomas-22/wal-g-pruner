@@ -15,3 +15,6 @@ jobs:
     - uses: ncipollo/release-action@v1
       with:
         draft: true
+        generateReleaseNotes: true
+        allowUpdates: true
+        updateOnlyUnreleased: true
