@@ -6,7 +6,6 @@
 ARG PYTHON_VERSION=3.12-slim
 ARG POETRY_VERSION=1.4.1
 ARG WAL_G_VERSION=v2.0.1
-ARG TARGETARCH
 
 # Creating a python base with shared environment variables
 FROM python:${PYTHON_VERSION} as python-base
@@ -49,15 +48,16 @@ WORKDIR $PYSETUP_PATH
 COPY ./poetry.lock ./pyproject.toml ./
 RUN poetry install --no-dev
 
-# Download wal-g binary
-RUN if [ "${TARGETARCH}" = "arm64" ]; then \
+# Install wget and download wal-g
+ARG TARGETARCH
+RUN apt-get update && apt-get install -y wget && rm -rf /var/lib/apt/lists/* && \
+    if [ "${TARGETARCH}" = "arm64" ]; then \
     export WALG_ARCH="aarch64"; \
     else \
     export WALG_ARCH="${TARGETARCH}"; \
-    fi \
-    && wget -O /wal-g-pg-ubuntu-20.04.tar.gz https://github.com/wal-g/wal-g/releases/download/${WAL_G_VERSION}/wal-g-pg-ubuntu-20.04-${WALG_ARCH}.tar.gz \
-    && tar -zxvf /wal-g-pg-ubuntu-20.04.tar.gz -C /usr/local/bin \
-    && rm /wal-g-pg-ubuntu-20.04.tar.gz
+    fi && \
+    wget -O /wal-g-pg-ubuntu-20.04.tar.gz https://github.com/wal-g/wal-g/releases/download/v2.0.1/wal-g-pg-ubuntu-20.04-${WALG_ARCH}.tar.gz
+RUN tar -xvf /wal-g-pg-ubuntu-20.04.tar.gz && (mv wal-g-pg-ubuntu20.04-* /usr/local/bin/wal-g || mv wal-g-pg-ubuntu-20.04-* /usr/local/bin/wal-g)
 
 # 'production' stage uses the clean 'python-base' stage and copies
 # in only our runtime deps that were installed in the 'builder-base'
