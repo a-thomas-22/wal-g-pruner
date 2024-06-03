@@ -4,6 +4,7 @@ import subprocess
 import time
 import signal
 import click
+import sys
 import psycopg2
 from psycopg2.extras import DictCursor
 
@@ -149,7 +150,7 @@ def prune_walg_backups(
     max_info_attempts = 5
     max_warn_attempts = 10
 
-    while True:
+    while True and not terminate:
         try:
             with psycopg2.connect(
                 host=pg_host,
@@ -171,6 +172,7 @@ def prune_walg_backups(
                 logging.warning("Database not ready: %s", str(e))
             else:
                 logging.error("Database not ready: %s", str(e))
+                sys.exit(1)
             time.sleep(30)
 
     # Set environment variables from envdir if provided
