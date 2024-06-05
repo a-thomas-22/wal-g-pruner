@@ -211,8 +211,11 @@ def prune_walg_backups(
                         res = subprocess.run(
                             delete_command, capture_output=True, check=True
                         )
-                        # Log the output
-                        logging.info("Command output: %s", res.stdout.decode("utf-8"))
+                        # Log the output if there is any
+                        if res.stdout:
+                            logging.info(
+                                "Command output: %s", res.stdout.decode("utf-8")
+                            )
                         logging.info("Successfully pruned WAL-G backups")
                         break
                     except subprocess.CalledProcessError as e:
