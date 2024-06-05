@@ -83,7 +83,14 @@ care of the content in this directory.
 An example log output of wal-g-pruner looks like this:
 
 ```
-TODO
+2024-06-03 22:52:30,226 - INFO - Waiting for the database to be ready...
+2024-06-03 22:52:30,234 - INFO - Reading environment variables from /run/etc/wal-e.d/env
+2024-06-03 22:52:30,241 - INFO - Running command: wal-g delete retain FULL 2 --confirm
+2024-06-03 22:52:38,024 - INFO - Successfully pruned WAL-G backups
+2024-06-03 22:52:38,024 - INFO - Waiting for next prune cycle...
+2024-06-04 22:52:38,035 - INFO - Running command: wal-g delete retain FULL 2 --confirm
+2024-06-04 22:53:22,806 - INFO - Successfully pruned WAL-G backups
+2024-06-04 22:53:22,806 - INFO - Waiting for next prune cycle...
 ```
 
 
