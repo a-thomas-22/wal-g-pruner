@@ -97,5 +97,5 @@ An example log output of wal-g-pruner looks like this:
 # Disclaimer
 ---
 
-This project is inspired by some of the great work done by [thedatabaseme/wal-g-pruner](https://github.com/thedatabaseme/wal-g-pruner), and modified for a different use case. 
+This project is inspired by some of the great work done by [thedatabaseme/wal-g-exporter](https://github.com/thedatabaseme/wal-g-exporter), and modified for a different use case. 
 ```
